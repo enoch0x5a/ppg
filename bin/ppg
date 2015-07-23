@@ -1,0 +1,89 @@
+#!/usr/bin/env ruby
+# -*- encoding: utf-8 -*-
+
+require 'ppg'
+
+require 'getoptlong'
+
+DEFAULT_PASSWORD_LENGTH = 8
+
+opts = GetoptLong.new(
+  ['--help', '-h', GetoptLong::NO_ARGUMENT],
+  ['--digits', '-d', GetoptLong::OPTIONAL_ARGUMENT],
+  ['--upcase', '-u', GetoptLong::OPTIONAL_ARGUMENT],
+  ['--length', '-l', GetoptLong::REQUIRED_ARGUMENT],
+  ['--verbous', '-v', GetoptLong::NO_ARGUMENT]
+)
+
+def print_help
+  puts <<-EOF
+  generator.rb [OPTIONS]
+
+    -h --help:    prints this help
+
+    -d N          include N digits in password
+    --digits N    1 by default
+
+    -u N          Include N letters in upper case
+    --upcase N    1 by default
+
+    -l N          make password of N characters
+    --length N
+
+    -v            turns on additional output
+    --verbous
+
+  EOF
+
+end
+
+begin
+
+mutators = {}
+password_length = DEFAULT_PASSWORD_LENGTH
+
+  opts.each do |opt, arg|
+    case opt
+    when '--help'
+      print_help
+      exit
+    when '--digits'
+
+      mutators[:Digits]  = Proc.new { Random.rand(10).to_s },
+        arg.empty? ? 1 : arg.to_i
+
+    when '--upcase'
+      mutators[:Upcase] = Proc.new { |c| c.upcase },
+        arg.empty? ? 1 : arg.to_i
+
+    when '--length'
+      password_length = arg.to_i
+      raise "password length must be greater than 0" if password_length <= 0
+
+    when '--verbous'
+      class Password
+        def to_s
+          "\n" \
+          "password: #{password}\n" \
+          "pattern:  #{password_pattern.to_s}\n"
+        end
+      end
+
+    end
+  end
+
+  pwgen = PwGen.new(password_length)
+  mutators.each { |name, mutator|
+    puts "enabling #{name} mutator for #{mutator.last} character(s)" 
+    pwgen.add_mutator(*mutator)
+  }
+  
+  puts pwgen.generate_password
+
+rescue GetoptLong::MissingArgument
+  puts
+  print_help
+  exit
+
+end
+
