@@ -19,7 +19,7 @@ class PwGen
     @dipthong_length = 2
   end
 
-  def add_mutator(proc, count)
+  def add_mutator(count, proc)
     @mutated_chars ||= []
     @clean_chars_left ||= @password.PASSWORD_LENGTH
 

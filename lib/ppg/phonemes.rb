@@ -1,11 +1,11 @@
 $ENGLISH_PHONEMES_HASH = {
 
-  :vowels => [ "a","e","i","o","u" ],
+  :vowel => [ "a","e","i","o","u" ],
 
-  :consonants => [ "b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n",
+  :consonant => [ "b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n",
     "p", "r", "s", "t", "v", "w", "x", "y", "z" ],
 
-  :dipthongs => { 
+  :dipthong => { 
     :vowel => ["ae", "oh", "oo", "ah", "ai", "ee", "ei", "ie"],
     :consonant => ["ng", "gh", "ch", "ph", "qu", "sh", "th"] 
   }
@@ -15,7 +15,7 @@ $ENGLISH_PHONEMES_HASH = {
 $ENGLISH_DOWNCASE_REGEXP = /[a-z]/.freeze
 
 class Phonemes
-  attr_reader :downcase_regexp
+  attr_reader :downcase_regexp, :phonemes
   
   def initialize(
     vowels = nil,
@@ -24,9 +24,9 @@ class Phonemes
     downcase_regexp = $ENGLISH_DOWNCASE_REGEXP
   )
 
-    @phonemes = { :vowel => vowels || $ENGLISH_PHONEMES_HASH[:vowels], 
-      :consonant => consonants || $ENGLISH_PHONEMES_HASH[:consonants], 
-      :dipthong => dipthongs || $ENGLISH_PHONEMES_HASH[:dipthongs]
+    @phonemes = { :vowel => vowels || $ENGLISH_PHONEMES_HASH[:vowel], 
+      :consonant => consonants || $ENGLISH_PHONEMES_HASH[:consonant], 
+      :dipthong => dipthongs || $ENGLISH_PHONEMES_HASH[:dipthong]
     }
     @downcase_regexp = downcase_regexp
   end

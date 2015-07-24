@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'ppg'
-  s.version     = '0.0.1.1'
+  s.version     = '0.0.2'
   s.date        = '2015-07-22'
   s.summary     = "Phonetic Password Generator"
   s.description = "A simple password generator with pronunciation in mind"
