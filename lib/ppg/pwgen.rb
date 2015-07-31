@@ -47,18 +47,19 @@ class PwGen
   rescue MutatorError
     STDERR << $!.message
     retry
-
   end
 
-  def generate_password
-    generate_password_pattern!
-      .fill_in_password_pattern!
+  def generate
+    self.generate_pattern!
+      .fill_in_pattern!
       .mutate!
     @password
   end
 
-  def fill_in_password_pattern!
-    @password.password_pattern.each do |pattern|
+protected
+
+  def fill_in_pattern!
+      @password.pattern.each do |pattern|
       if pattern.kind_of?(Symbol)
         elem = @phonemes[pattern][SecureRandom.random_number(@phonemes[pattern].length)]
       else pattern.kind_of?(Array)
@@ -71,7 +72,7 @@ class PwGen
     self
   end
 
-  def generate_password_pattern!
+  def generate_pattern!
     length_left = @password.PASSWORD_LENGTH
     next_pattern = previous_pattern = nil
     can_be_next_patterns = @phonemes.keys
@@ -90,7 +91,7 @@ class PwGen
       can_be_next_patterns << previous_pattern if previous_pattern != nil
 
       if next_pattern == :dipthong
-        if @password.password_pattern.empty? #first element
+        if @password.pattern.empty? #first element
           auxiliary_pattern = generate_random_pattern([:vowel, :consonant])
         else
           auxiliary_pattern = 
@@ -109,7 +110,7 @@ class PwGen
         previous_pattern = next_pattern
 
       end
-      @password.password_pattern << next_pattern
+      @password.pattern << next_pattern
     end
     self
   end
@@ -137,7 +138,5 @@ class PwGen
   def generate_random_pattern(patterns)
     patterns [ SecureRandom.random_number(patterns.length) ]
   end
-
-  private :generate_random_pattern, :requirements_not_met?
 
 end

@@ -37,17 +37,16 @@ def print_help
 end
 
 begin
-
-mutators = {}
-password_length = DEFAULT_PASSWORD_LENGTH
+  mutators = {}
+  password_length = DEFAULT_PASSWORD_LENGTH
 
   opts.each do |opt, arg|
     case opt
     when '--help'
       print_help
       exit
-    when '--digits'
 
+    when '--digits'
       mutators[:Digits]  = arg.empty? ? 1 : arg.to_i,
         Proc.new { Random.rand(10).to_s }
 
@@ -67,7 +66,6 @@ password_length = DEFAULT_PASSWORD_LENGTH
           "pattern:  #{password_pattern.to_s}\n"
         end
       end
-
     end
   end
 
@@ -78,8 +76,8 @@ password_length = DEFAULT_PASSWORD_LENGTH
     pwgen.add_mutator(*mutator)
   }
   
-  puts pwgen.generate_password
-
+  # puts pwgen.generate_password
+  puts pwgen.generate
 rescue GetoptLong::MissingArgument
   puts
   print_help
