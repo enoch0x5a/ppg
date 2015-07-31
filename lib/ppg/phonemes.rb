@@ -15,7 +15,7 @@ $ENGLISH_PHONEMES_HASH = {
 $ENGLISH_DOWNCASE_REGEXP = /[a-z]/.freeze
 
 class Phonemes
-  attr_reader :downcase_regexp, :phonemes
+  attr_reader :downcase_regexp, :phonemes, :dipthong_length
   
   def initialize(
     vowels = nil,
@@ -29,6 +29,7 @@ class Phonemes
       :dipthong => dipthongs || $ENGLISH_PHONEMES_HASH[:dipthong]
     }
     @downcase_regexp = downcase_regexp
+    @dipthong_length = 2
   end
 
   def keys
